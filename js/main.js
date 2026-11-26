@@ -1,7 +1,7 @@
 const WA='919121052932';
 /* Paste the Google Apps Script web-app URL here (see docs/google-sheet-setup.md).
    Until it is set, "Talk to us" forms fall back to WhatsApp so no lead is lost. */
-const SHEET_URL='';
+const SHEET_URL='https://script.google.com/macros/s/AKfycbzffMNbAWAtrIMF9T-_Z2cUM-SBdajfac8kyLH7bmmiHnr_48AfyObbPUotTZ2fTxYP/exec';
 
 const burger=document.querySelector('.burger');
 if(burger)burger.onclick=e=>{const u=document.querySelector('.nav ul');u.classList.toggle('open');e.target.setAttribute('aria-expanded',u.classList.contains('open'))};
