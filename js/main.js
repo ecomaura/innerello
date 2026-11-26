@@ -111,3 +111,21 @@ document.getElementById('talkForm').onsubmit=async e=>{e.preventDefault();const 
   addEventListener('pageshow',e=>{if(e.persisted)document.body.classList.remove('leaving')});
  }catch(err){root.classList.remove('js');console.error(err)}
 })();
+
+/* ===== Brochure: lead form first, then the PDF downloads ===== */
+(function(){
+ const links=document.querySelectorAll('[data-brochure]');if(!links.length)return;
+ const file=links[0].getAttribute('href');
+ const dl=()=>{const a=document.createElement('a');a.href=file;a.download='Innerello-Company-Profile.pdf';document.body.appendChild(a);a.click();a.remove()};
+ const d=document.createElement('dialog');d.className='talk';
+ d.innerHTML=`<div class="in"><button class="x" type="button" aria-label="Close">&times;</button><h2>Download our brochure</h2><p class="lead" style="font-size:1rem">Share your details and the brochure will download right away.</p><br>
+<form id="brochureForm"><label>Name<input name="Name" required autocomplete="name"></label><label>Phone<input name="Phone" type="tel" required autocomplete="tel"></label><label>Email<input name="Email" type="email" required autocomplete="email"></label><label>Organization / Institution<input name="Organization" autocomplete="organization"></label><button class="btn" type="submit">Download brochure</button><div class="ok">Thank you. Your download has started. <a href="${file}" download style="text-decoration:underline">Download again</a></div></form></div>`;
+ document.body.appendChild(d);
+ d.querySelector('.x').onclick=()=>d.close();
+ d.addEventListener('click',e=>{if(e.target===d)d.close()});
+ links.forEach(l=>l.addEventListener('click',e=>{e.preventDefault();d.querySelector('.ok').style.display='none';d.showModal()}));
+ d.querySelector('form').onsubmit=async e=>{e.preventDefault();const f=e.target,data=Object.fromEntries(new FormData(f));
+  data.Type='Brochure download';data.Message='Requested company brochure';
+  toSheet('Brochure download',data);   /* never block the download if logging fails */
+  dl();f.reset();f.querySelector('.ok').style.display='block'};
+})();
