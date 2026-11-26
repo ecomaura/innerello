@@ -135,3 +135,68 @@ dialog.talk .err{display:none;color:#a02828;font-weight:600}
 .engage.e5{grid-template-columns:repeat(5,1fr)}
 @media(max-width:960px){.engage.e5{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.engage.e5{grid-template-columns:1fr}}
+
+/* ===== Round 3: motion (slow, scroll-driven; only active when JS adds .js) ===== */
+:root{--ease:cubic-bezier(.22,.61,.36,1);--slow:1.3s;--shift:56px}
+body{overflow-x:clip;animation:pagein 1.1s var(--ease) both;transition:opacity .5s ease}
+body.leaving{opacity:0}
+@keyframes pagein{from{opacity:0}}
+header{animation:drop 1.1s var(--ease) both;transition:box-shadow .6s,background .6s}
+header.scrolled{box-shadow:0 10px 36px rgba(13,67,71,.12)}
+@keyframes drop{from{translate:0 -100%;opacity:0}}
+
+/* scroll progress */
+.sp{position:fixed;left:0;top:0;height:3px;width:100%;z-index:90;background:linear-gradient(90deg,var(--camel),var(--cyan),var(--teal));transform-origin:left;transform:scaleX(0);pointer-events:none}
+
+/* reveal system */
+.js .rv{opacity:0}
+.js .rv.in{opacity:1;animation:var(--a,rvUp) var(--slow) var(--ease) var(--d,0s) backwards}
+.rv-left{--a:rvLeft}.rv-right{--a:rvRight}.rv-zoom{--a:rvZoom}.rv-pop{--a:rvPop}
+@keyframes rvUp{from{opacity:0;translate:0 44px;filter:blur(6px)}}
+@keyframes rvLeft{from{opacity:0;translate:calc(var(--shift)*-1) 0;filter:blur(6px)}}
+@keyframes rvRight{from{opacity:0;translate:var(--shift) 0;filter:blur(6px)}}
+@keyframes rvZoom{from{opacity:0;scale:.9;filter:blur(8px)}}
+@keyframes rvPop{from{opacity:0;scale:.82;translate:0 30px}}
+
+/* lines that draw themselves */
+.js .gapmap:before,.js .flow:before{transform:scaleX(0);transform-origin:left;transition:transform 2.4s var(--ease) .4s}
+.js .gapmap.in:before,.js .flow.in:before{transform:none}
+.js .flow li:before{scale:0}
+.js .flow li.in:before{scale:1;transition:scale 1s cubic-bezier(.34,1.56,.64,1) .6s}
+.js .steps div{border-top-color:transparent;transition:border-color 1.2s .5s}.js .steps div.in{border-top-color:var(--cyan)}
+.js .gm .ic{scale:.6;transition:scale 1.1s cubic-bezier(.34,1.56,.64,1) .5s}.js .gm.in .ic{scale:1}
+.js .g>.card.in .ph:after,.js .g>.card.in img{transition-delay:0s}
+
+/* hero + page banners: gentle ambient motion */
+.hero .vis{animation-duration:1.5s}
+.vis:before{animation:sway 10s ease-in-out infinite alternate}
+@keyframes sway{to{rotate:7deg}}
+.chip.rv.in{animation:rvPop var(--slow) var(--ease) var(--d,0s) backwards,float 7s ease-in-out 2.6s infinite alternate}
+.c2.rv.in{animation-duration:var(--slow),9s}
+@keyframes float{to{translate:0 -12px}}
+.pg:after{animation:sway 14s ease-in-out infinite alternate}
+.flowsec:before{animation:drift 16s ease-in-out infinite alternate}
+@keyframes drift{to{translate:60px -40px}}
+.arch img{animation:kenburns 18s ease-in-out infinite alternate}
+@keyframes kenburns{to{scale:1.07}}
+
+/* slower, softer hovers */
+.btn{transition:background .5s,border-color .5s,color .5s,translate .5s var(--ease),box-shadow .5s}
+.btn:hover{translate:0 -3px;box-shadow:0 14px 30px rgba(13,67,71,.22)}
+.card{transition:transform .6s var(--ease),box-shadow .6s}
+.card img,.split img{transition:transform 1.2s var(--ease)}
+.engage a{transition:transform .6s var(--ease),box-shadow .6s}
+.ws .evl li{transition:transform .6s var(--ease),box-shadow .6s}.ws .evl li:hover{transform:translateX(8px);box-shadow:0 12px 30px rgba(13,67,71,.1)}
+.cal li{transition:transform .6s var(--ease),box-shadow .6s}.cal li:hover{transform:translateX(8px);box-shadow:0 12px 30px rgba(13,67,71,.1)}
+.rich div,.gm li,.tags span{transition:transform .6s var(--ease),box-shadow .6s,background .6s}
+.rich div:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(13,67,71,.12)}
+.tags span:hover{transform:translateY(-3px)}
+.nav li a{transition:color .5s,border-color .5s}
+details{transition:box-shadow .5s,border-color .5s}details:hover{box-shadow:0 10px 26px rgba(13,67,71,.08)}
+details[open] p{animation:open .8s var(--ease)}
+@keyframes open{from{opacity:0;translate:0 -10px}}
+.fab{animation:ring 3.6s ease-out 3s infinite}
+@keyframes ring{0%{box-shadow:0 10px 30px rgba(0,0,0,.25),0 0 0 0 rgba(31,175,87,.5)}70%,100%{box-shadow:0 10px 30px rgba(0,0,0,.25),0 0 0 20px rgba(31,175,87,0)}}
+
+@media(max-width:960px){:root{--shift:30px}}
+@media(prefers-reduced-motion:reduce){.sp{display:none}.vis:before,.pg:after,.flowsec:before,.arch img,.chip{animation:none!important}}
